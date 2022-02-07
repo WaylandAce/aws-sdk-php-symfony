@@ -43,8 +43,7 @@ class AwsExtension extends Extension
         }
     }
 
-
-    private function createServiceDefinition($name)
+    private function createServiceDefinition($name): mixed
     {
         $clientClass = "Aws\\{$name}\\{$name}Client";
         $serviceDefinition = new Definition(
@@ -73,11 +72,11 @@ class AwsExtension extends Extension
                 $this->inflateServicesInConfig($value);
             }
 
-            if (is_string($value) && 0 === strpos($value, '@')) {
+            if (is_string($value) && str_starts_with($value, '@')) {
                 // this is either a service reference or a string meant to
                 // start with an '@' symbol. In any case, lop off the first '@'
                 $value = substr($value, 1);
-                if (0 !== strpos($value, '@')) {
+                if (!str_starts_with($value, '@')) {
                     // this is a service reference, not a string literal
                     $value = new Reference($value);
                 }
